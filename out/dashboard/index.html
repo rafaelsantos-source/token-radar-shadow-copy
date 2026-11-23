@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shadow Copy Radar — Token Launch Radar</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <div class="mark">SC</div>
+    <div>
+      <h1>Shadow Copy Radar</h1>
+      <p class="sub">Which pre-token protocol would a copy-trader follow — and with how much?</p>
+    </div>
+  </div>
+  <div class="meta" id="meta"></div>
+</header>
+
+<nav class="tabs">
+  <button id="tab-board" class="tab active" type="button">Copy board</button>
+  <button id="tab-live" class="tab" type="button">Live tokens</button>
+  <span class="tab-note" id="tab-note"></span>
+</nav>
+
+<section class="controls" id="controls">
+  <label class="ctl">Search
+    <input id="q" type="search" placeholder="name or slug" autocomplete="off">
+  </label>
+  <label class="ctl">Category
+    <select id="category"><option value="">All categories</option></select>
+  </label>
+  <label class="ctl">Chain
+    <select id="chain"><option value="">All chains</option></select>
+  </label>
+  <label class="ctl">Min copy score
+    <select id="minScore">
+      <option value="0">Any score</option>
+      <option value="0.38">0.38 and up</option>
+      <option value="0.45">0.45 and up</option>
+      <option value="0.5">0.50 and up</option>
+    </select>
+  </label>
+  <label class="ctl check"><input id="watchlistOnly" type="checkbox"> Watchlist only</label>
+  <label class="ctl">Sort
+    <select id="sort">
+      <option value="implied">Implied value</option>
+      <option value="score">Copy score</option>
+      <option value="tvl">TVL</option>
+      <option value="flow">7-day flow</option>
+    </select>
+  </label>
+</section>
+
+<main>
+  <section id="board-view">
+    <p class="hint" id="board-count"></p>
+    <table class="board">
+      <thead>
+        <tr>
+          <th class="num">#</th>
+          <th>Protocol</th>
+          <th>Category</th>
+          <th>Chains</th>
+          <th class="num">TVL</th>
+          <th class="num">7d flow</th>
+          <th>Copy score</th>
+          <th>Tier</th>
+          <th class="num">Implied value</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="hint">Click a row for its signal breakdown and copy plan. Scores are recomputed in this page from each row's own signals — the number on screen is the model's number.</p>
+  </section>
+
+  <section id="detail-view" hidden>
+    <p><button id="back" class="linklike" type="button">&larr; Back to the board</button></p>
+    <div id="detail"></div>
+  </section>
+
+  <section id="live-view" hidden>
+    <p class="hint">Already trading — the market's own values, never the model. Shown so a copy-trader can tell a launch from a listing.</p>
+    <table class="board">
+      <thead>
+        <tr>
+          <th>Protocol</th>
+          <th>Category</th>
+          <th>Chains</th>
+          <th class="num">TVL</th>
+          <th class="num">Market cap</th>
+          <th class="num">7d flow</th>
+        </tr>
+      </thead>
+      <tbody id="live-rows"></tbody>
+    </table>
+  </section>
+</main>
+
+<footer class="foot">
+  <h2>How the copy score works</h2>
+  <p>Five signals from the snapshot alone, each 0 to 1: <strong>inflow</strong> (7-day TVL flow, 30%), <strong>scale</strong> (log TVL, 20%), <strong>breadth</strong> (chain count, 15%), <strong>persistence</strong> (age, 15%), <strong>category heat</strong> (the median 7-day flow of the category's pre-token peers, 20%). Implied value = TVL &times; 0.22 &times; (0.35 + 1.6 &times; copy score). Tier A mirrors $250, tier B $150, tier C $75 — sizing, not exclusion: the board carries every rankable pre-token protocol, watchlist and early alike.</p>
+  <p>A protocol "records no token" when the snapshot records no market cap, no CoinGecko id and no symbol for it — that is the list's record, never proof it has none. No name is special-cased; the same function scores every row. Snapshot: <span id="source"></span></p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
